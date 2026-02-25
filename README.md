@@ -2,24 +2,26 @@
 
 ## Overview
 
-This project implements a real-time Face Recognition System using Python and OpenCV. The system captures facial data using a webcam, trains a recognizer model, and performs live face recognition with identity labeling.
+This project implements a complete real-time Face Recognition System using Python and OpenCV.
 
-The implementation uses Haar Cascade for face detection and the LBPH (Local Binary Pattern Histogram) algorithm for face recognition.
+The system performs:
+
+1. Face dataset collection using webcam  
+2. Model training using LBPH algorithm  
+3. Real-time face detection  
+4. Real-time face recognition with name labeling  
+5. Unknown face detection  
+6. Confidence score display in terminal  
+
+The system uses:
+- Haar Cascade Classifier for face detection
+- LBPH (Local Binary Pattern Histogram) for face recognition
+
+This project demonstrates a classical computer vision-based face recognition pipeline without deep learning.
 
 ---
 
-## Features
-
-- Real-time face detection using Haar Cascade classifier
-- Face dataset collection from webcam
-- Model training using LBPHFaceRecognizer
-- Real-time face recognition with confidence score
-- Unknown face detection handling
-- Live bounding box and label display
-
----
-
-## Technologies Used
+# Technologies Used
 
 - Python 3.x
 - OpenCV
@@ -27,68 +29,230 @@ The implementation uses Haar Cascade for face detection and the LBPH (Local Bina
 - Haar Cascade Classifier
 - LBPH Face Recognizer
 
----
+Install required dependencies:
 
-## Working Principle
-
-1. Face Detection  
-   The Haar Cascade classifier detects faces in real-time video frames.
-
-2. Data Collection  
-   Face images are captured from the webcam and stored for training purposes.
-
-3. Training Phase  
-   The LBPH algorithm extracts facial features and trains a recognition model.  
-   The trained model is saved as `face_trained.yml`.
-
-4. Recognition Phase  
-   During live execution:
-   - Face is detected
-   - Model predicts label ID
-   - Confidence score is calculated
-   - If confidence is within threshold, identity name is displayed
-   - Otherwise, the face is marked as "Unknown"
-
----
-
-## How to Run
-
-1. Install required dependencies:
-
+```bash
 pip install opencv-python numpy
-
-2. Ensure the following files are in the same directory:
-   - face_trained.yml
-   - haar_face.xml
-   - features.npy
-   - labels.npy
-
-3. Run the recognition system:
-
-python Test_Model.py
-
-Press 'q' to exit the application.
+```
 
 ---
+
+# COMPLETE STEP-BY-STEP PROCESS
+
+This project is divided into 4 main stages:
+
+1. Dataset Collection
+2. Model Training
+3. Real-Time Face Detection
+4. Real-Time Face Recognition
+
+---
+
+# STEP 1: DATASET COLLECTION
+
+## Objective
+Capture face images from webcam and store them for training.
+
+## Process
+
+1. Start webcam using OpenCV.
+2. Convert frame to grayscale.
+3. Detect faces using Haar Cascade.
+4. Crop detected face region.
+5. Save cropped face images into dataset folder.
+6. Capture 100–200 images per person.
+7. Press 'q' to stop capturing.
+
+## Flow
+
+Webcam → Capture Frame → Convert to Gray → Detect Face → Crop Face → Save Image → Repeat
 
 ## Output
 
+dataset/
+    Person_Name_1/
+    Person_Name_2/
+
+Each folder contains face images of one person.
+
+---
+
+# STEP 2: MODEL TRAINING (LBPH)
+
+## Objective
+Train the face recognition model using collected dataset.
+
+## Process
+
+1. Read all images from dataset folder.
+2. Convert images to grayscale.
+3. Assign numeric labels to each person.
+4. Store images in features list.
+5. Store labels in labels list.
+6. Convert lists into NumPy arrays.
+7. Train LBPHFaceRecognizer.
+8. Save trained model as face_trained.yml.
+9. Save features.npy and labels.npy.
+
+## Flow
+
+Read Dataset → Extract Faces → Assign Labels → Convert to NumPy → Train LBPH → Save Model
+
+## Files Generated
+
+- face_trained.yml
+- features.npy
+- labels.npy
+
+---
+
+# STEP 3: REAL-TIME FACE DETECTION
+
+## Objective
+Detect face from live webcam feed.
+
+## Process
+
+1. Start webcam.
+2. Convert frame to grayscale.
+3. Apply Haar Cascade classifier.
+4. Get face coordinates (x, y, w, h).
+5. Draw rectangle around face.
+
+## Flow
+
+Webcam → Frame → Gray → Haar Cascade → (x, y, w, h) → Draw Rectangle
+
+## Output
+
+Green bounding box around detected face.
+
+---
+
+# STEP 4: REAL-TIME FACE RECOGNITION
+
+## Objective
+Recognize trained faces and differentiate unknown faces.
+
+## Process
+
+1. Detect face using Haar Cascade.
+2. Crop face region.
+3. Pass cropped face to trained LBPH model.
+4. Model predicts:
+   - Label ID
+   - Confidence score
+5. Compare confidence with threshold.
+6. If confidence < threshold:
+       Display person name.
+   Else:
+       Display "Unknown".
+7. Draw green bounding box.
+8. Display name above rectangle.
+9. Print confidence score in terminal.
+10. Press 'q' to exit.
+
+## Recognition Logic
+
+Detected Face → Predict (label, confidence)
+
+If confidence < threshold:
+    Recognized
+Else:
+    Unknown
+
+---
+
+# CONFIDENCE SCORE EXPLANATION
+
+Lower confidence value = Better match  
+Higher confidence value = Poor match  
+
+Example:
+
+Confidence = 30 → Strong match  
+Confidence = 85 → Weak match  
+
+Threshold Example:
+
+If confidence < 70:
+    Recognized
+Else:
+    Unknown
+
+Confidence score is printed in terminal for monitoring accuracy.
+
+---
+
+# COMPLETE PROJECT EXECUTION ORDER
+
+1. Run data collection script
+2. Capture images for each person
+3. Run training script
+4. Model gets trained and saved
+5. Run Test_Model.py
+6. Webcam opens
+7. Face detected
+8. Model predicts label
+9. Green box drawn
+10. Name displayed (if trained)
+11. Unknown displayed (if not trained)
+12. Confidence printed in terminal
+13. Press 'q' to exit
+
+---
+
+# HOW TO RUN
+
+Ensure the following files are in same directory:
+
+- face_trained.yml
+- haar_face.xml
+- features.npy
+- labels.npy
+- Collect_Data.py
+- Train_Model.py
+- Test_Model.py
+
+Run:
+
+```bash
+python Test_Model.py
+```
+
+Press 'q' to exit.
+
+---
+
+# OUTPUT
+
 - Live webcam feed
-- Bounding box around detected faces
-- Recognized name label
-- Confidence score displayed in terminal
-- Unknown face detection support
+- Green bounding box around face
+- Recognized name displayed
+- "Unknown" label for untrained faces
+- Confidence score printed in terminal
 
 ---
 
-## Sample Results
+# LEARNING OUTCOMES
 
-The repository includes demo screenshots and video showing:
-- Face data collection
-- Model training
-- Real-time recognition
-- Unknown face detection
+- Understanding Haar Cascade detection
+- Understanding LBPH feature extraction
+- Real-time video processing
+- Classical ML-based face recognition
+- Confidence threshold tuning
+- Unknown face classification
 
 ---
 
-This project was developed to understand classical computer vision-based face recognition systems and real-time implementation using OpenCV.
+# FUTURE IMPROVEMENTS
+
+- Add GUI interface
+- Improve lighting normalization
+- Add database integration
+- Replace LBPH with deep learning model (CNN / FaceNet)
+- Deploy as desktop application
+
+---
+
+This project is built to understand classical real-time computer vision-based face recognition using OpenCV and Python.
